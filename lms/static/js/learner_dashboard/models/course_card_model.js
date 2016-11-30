@@ -4,9 +4,10 @@
 (function(define) {
     'use strict';
     define([
-        'backbone'
+        'backbone',
+        'edx-ui-toolkit/js/utils/date-utils'
     ],
-        function(Backbone) {
+        function(Backbone, DateUtils) {
             return Backbone.Model.extend({
                 initialize: function(data) {
                     if (data) {
@@ -64,15 +65,44 @@
                     });
                 },
 
+                formatDate: function(date, userPreferences) {
+                    var context;
+                    var userTimezone = '';
+                    var userLanguage = '';
+                    if (userPreferences !== undefined) {
+                        userTimezone = userPreferences.time_zone;
+                        userLanguage = userPreferences['pref-lang'];
+                    }
+                    context = {
+                        datetime: date,
+                        timezone: userTimezone,
+                        language: userLanguage,
+                        format: DateUtils.dateFormatEnum.shortDate
+                    };
+                    return DateUtils.localize(context);
+                },
+
                 setActiveRunMode: function(runMode) {
+                    var startDateString;
                     if (runMode) {
+                        if (runMode.advertised_start !== undefined && runMode.advertised_start !== 'None') {
+                            startDateString = runMode.advertised_start;
+                        } else {
+                            startDateString = this.formatDate(
+                                runMode.start_date,
+                                runMode.user_preferences
+                            );
+                        }
                         this.set({
                             certificate_url: runMode.certificate_url,
                             course_image_url: runMode.course_image_url || '',
                             course_key: runMode.course_key,
                             course_url: runMode.course_url || '',
                             display_name: this.context.display_name,
-                            end_date: runMode.end_date,
+                            end_date: this.formatDate(
+                                runMode.end_date,
+                                runMode.user_preferences
+                            ),
                             enrollable_run_modes: this.getEnrollableRunModes(),
                             is_course_ended: runMode.is_course_ended,
                             is_enrolled: runMode.is_enrolled,
@@ -81,13 +111,12 @@
                             marketing_url: runMode.marketing_url,
                             mode_slug: runMode.mode_slug,
                             run_key: runMode.run_key,
-                            start_date: runMode.start_date,
+                            start_date: startDateString,
                             upcoming_run_modes: this.getUpcomingRunModes(),
                             upgrade_url: runMode.upgrade_url
                         });
                     }
                 },
-
                 setUnselected: function() {
                 // Called to reset the model back to the unselected state.
                     var unselectedMode = this.getUnselectedRunMode(this.get('enrollable_run_modes'));
