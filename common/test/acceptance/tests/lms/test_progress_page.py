@@ -5,8 +5,8 @@ progress page.
 """
 from contextlib import contextmanager
 import ddt
-import flaky
 from nose.plugins.attrib import attr
+from bok_choy.promise import EmptyPromise
 
 from ..helpers import (
     UniqueCourseTest, auto_auth, create_multiple_choice_problem, create_multiple_choice_xml, get_modal_alert
@@ -142,6 +142,21 @@ class PersistentGradesTest(ProgressPageBaseTest):
         subsection = self.course_outline.section(self.SECTION_NAME).subsection(self.SUBSECTION_NAME)
         subsection.expand_subsection()
         subsection.add_unit()
+
+        def _is_jquery_loaded():
+            """
+            Check if jquery is defined.
+            TODO: TNL-6040 is this valuable to add as a helper or bokchoy method?
+            """
+            return self.browser.execute_script(
+                "return typeof(jQuery)!=='undefined'"
+            )
+
+        EmptyPromise(
+            _is_jquery_loaded,
+            "JQuery is Loaded",
+            timeout=60
+        ).fulfill()
         subsection.publish()
 
     def _set_staff_lock_on_subsection(self, locked):
@@ -225,7 +240,6 @@ class PersistentGradesTest(ProgressPageBaseTest):
         _change_subsection_structure,
         _change_weight_for_problem
     )
-    @flaky.flaky  # TNL-6040
     def test_content_changes_do_not_change_score(self, edit):
         with self._logged_in_session():
             self.courseware_page.visit()
