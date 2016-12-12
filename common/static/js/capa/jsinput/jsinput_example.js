@@ -1,3 +1,5 @@
+/* globals Channel */
+
 (function() {
     'use strict';
 
@@ -10,27 +12,6 @@
         channel,
         select = document.getElementsByClassName('choices')[0],
         feedback = document.getElementsByClassName('feedback')[0];
-
-    // Establish a channel only if this application is embedded in an iframe.
-    // This will let the parent window communicate with this application using
-    // RPC and bypass SOP restrictions.
-    if (window.parent !== window) {
-        channel = Channel.build({
-            window: window.parent,
-            origin: '*',
-            scope: 'JSInput'
-        });
-
-        channel.bind('getGrade', getGrade);
-        channel.bind('getState', getState);
-        channel.bind('setState', setState);
-    }
-
-    select.addEventListener('change', function() {
-        state.selectedChoice = select.options[select.selectedIndex].text;
-        feedback.innerText = "You have selected '" + state.selectedChoice +
-            "'. Press the Submit button to grade your answer.";
-    });
 
     function populateSelect() {
         // Populate the select from `state.availableChoices`.
@@ -76,6 +57,27 @@
         state = JSON.parse(stateString);
         populateSelect();
     }
+
+    // Establish a channel only if this application is embedded in an iframe.
+    // This will let the parent window communicate with this application using
+    // RPC and bypass SOP restrictions.
+    if (window.parent !== window) {
+        channel = Channel.build({
+            window: window.parent,
+            origin: '*',
+            scope: 'JSInput'
+        });
+
+        channel.bind('getGrade', getGrade);
+        channel.bind('getState', getState);
+        channel.bind('setState', setState);
+    }
+
+    select.addEventListener('change', function() {
+        state.selectedChoice = select.options[select.selectedIndex].text;
+        feedback.innerText = "You have selected '" + state.selectedChoice +
+            "'. Press the Submit button to grade your answer.";
+    });
 
     return {
         getState: getState,
