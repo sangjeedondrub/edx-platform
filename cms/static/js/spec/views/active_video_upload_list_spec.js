@@ -9,7 +9,8 @@ define(
     ],
     function($, ActiveVideoUpload, ActiveVideoUploadListView, TemplateHelpers) {
         'use strict';
-        var concurrentUploadLimit = 2;
+        var concurrentUploadLimit = 2,
+            CONVERSION_FACTOR_GBS_TO_BYTES = 1000 * 1000 * 1000;
 
         describe('ActiveVideoUploadListView', function() {
             beforeEach(function() {
@@ -18,11 +19,14 @@ define(
                 this.postUrl = '/test/post/url';
                 this.uploadButton = $('<button>');
                 this.videoSupportedFileFormats = ['.mp4', '.mov'];
+                this.videoUploadMaxFileSizeInGB = 5;
+                this.maxFileSizeInBytes = this.videoUploadMaxFileSizeInGB * CONVERSION_FACTOR_GBS_TO_BYTES;
                 this.view = new ActiveVideoUploadListView({
                     concurrentUploadLimit: concurrentUploadLimit,
                     postUrl: this.postUrl,
                     uploadButton: this.uploadButton,
-                    videoSupportedFileFormats: this.videoSupportedFileFormats
+                    videoSupportedFileFormats: this.videoSupportedFileFormats,
+                    videoUploadMaxFileSizeInGB: this.videoUploadMaxFileSizeInGB
                 });
                 this.view.render();
                 jasmine.Ajax.install();
@@ -86,6 +90,40 @@ define(
                         'test-3.txt is not in a supported file format. Supported file formats are ' +
                         this.videoSupportedFileFormats.join(' and ') + '.'
                     );
+                });
+            });
+
+            describe('file size upload', function() {
+                it('blocks file uploads larger than the max file size', function() {
+                    var fileToUpload = {
+                        files: [
+                            {name: 'large-size-file.mp4', size: this.maxFileSizeInBytes + 1},
+                        ]
+                    };
+                    this.view.$uploadForm.fileupload('add', fileToUpload);
+                    expect(this.view.fileErrorMsg).toBeDefined();
+                    expect(this.view.fileErrorMsg.options.title).toEqual('Your file could not be uploaded');
+                    expect(this.view.fileErrorMsg.options.message).toEqual(
+                        'large-size-file.mp4 exceeds maximum size of '+ this.videoUploadMaxFileSizeInGB +' GB.'
+                    );
+                });
+                it('allows file uploads equal in size to the max file size', function() {
+                    var fileToUpload = {
+                        files: [
+                            {name: 'max-size-file.mp4', size: this.maxFileSizeInBytes},
+                        ]
+                    };
+                    this.view.$uploadForm.fileupload('add', fileToUpload);
+                    expect(this.view.fileErrorMsg).toBeNull();
+                });
+                it('allows file uploads smaller than the max file size', function() {
+                    var fileToUpload = {
+                        files: [
+                            {name: 'smaller-size-file.mp4', size: this.maxFileSizeInBytes - 1},
+                        ]
+                    };
+                    this.view.$uploadForm.fileupload('add', fileToUpload);
+                    expect(this.view.fileErrorMsg).toBeNull();
                 });
             });
 

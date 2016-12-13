@@ -34,6 +34,8 @@ VIDEO_SUPPORTED_FILE_FORMATS = {
     '.mov': 'video/quicktime',
 }
 
+VIDEO_UPLOAD_MAX_FILE_SIZE_GB = 5
+
 
 class StatusDisplayStrings(object):
     """
@@ -262,7 +264,8 @@ def videos_index_html(course):
             "encodings_download_url": reverse_course_url("video_encodings_download", unicode(course.id)),
             "previous_uploads": _get_index_videos(course),
             "concurrent_upload_limit": settings.VIDEO_UPLOAD_PIPELINE.get("CONCURRENT_UPLOAD_LIMIT", 0),
-            "video_supported_file_formats": VIDEO_SUPPORTED_FILE_FORMATS.keys()
+            "video_supported_file_formats": VIDEO_SUPPORTED_FILE_FORMATS.keys(),
+            "video_upload_max_file_size": VIDEO_UPLOAD_MAX_FILE_SIZE_GB
         }
     )
 

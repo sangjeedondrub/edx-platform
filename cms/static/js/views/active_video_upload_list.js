@@ -30,11 +30,12 @@ define([
                 this.concurrentUploadLimit = options.concurrentUploadLimit || 0;
                 this.postUrl = options.postUrl;
                 this.videoSupportedFileFormats = options.videoSupportedFileFormats;
+                this.videoUploadMaxFileSizeInGB = options.videoUploadMaxFileSizeInGB;
                 this.onFileUploadDone = options.onFileUploadDone;
                 if (options.uploadButton) {
                     options.uploadButton.click(this.chooseFile.bind(this));
                 }
-                this.maxFileSizeInBytes = 5 * CONVERSION_FACTOR_GBS_TO_BYTES;
+                this.maxFileSizeInBytes = this.videoUploadMaxFileSizeInGB * CONVERSION_FACTOR_GBS_TO_BYTES;
                 // error message modal for file uploads
                 this.fileErrorMsg = null;
             },
@@ -244,10 +245,10 @@ define([
                     }
                     if (file.size > self.maxFileSizeInBytes) {
                         error = gettext(
-                            '{filename} exceeds maximum size of {maxFileSizeInGB} GB. '
+                            '{filename} exceeds maximum size of {maxFileSizeInGB} GB.'
                         )
                         .replace('{filename}', fileName)
-                        .replace('{maxFileSizeInGB}', self.maxFileSizeInBytes / CONVERSION_FACTOR_GBS_TO_BYTES);
+                        .replace('{maxFileSizeInGB}', self.videoUploadMaxFileSizeInGB);
                         return false;
                     }
                 });
