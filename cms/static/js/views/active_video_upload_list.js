@@ -13,8 +13,9 @@ define([
     function($, _, Backbone, ActiveVideoUpload, BaseView, ActiveVideoUploadView, NotificationView, HtmlUtils,
              activeVideoUploadListTemplate) {
         'use strict';
-        var CONVERSION_FACTOR_GBS_TO_BYTES = 1000 * 1000 * 1000,
-            ActiveVideoUploadListView = BaseView.extend({
+        var ActiveVideoUploadListView,
+            CONVERSION_FACTOR_GBS_TO_BYTES = 1000 * 1000 * 1000;
+        ActiveVideoUploadListView = BaseView.extend({
             tagName: 'div',
             events: {
                 'click .file-drop-area': 'chooseFile',

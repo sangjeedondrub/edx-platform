@@ -97,20 +97,20 @@ define(
                 it('blocks file uploads larger than the max file size', function() {
                     var fileToUpload = {
                         files: [
-                            {name: 'large-size-file.mp4', size: this.maxFileSizeInBytes + 1},
+                            {name: 'large-size-file.mp4', size: this.maxFileSizeInBytes + 1}
                         ]
                     };
                     this.view.$uploadForm.fileupload('add', fileToUpload);
                     expect(this.view.fileErrorMsg).toBeDefined();
                     expect(this.view.fileErrorMsg.options.title).toEqual('Your file could not be uploaded');
                     expect(this.view.fileErrorMsg.options.message).toEqual(
-                        'large-size-file.mp4 exceeds maximum size of '+ this.videoUploadMaxFileSizeInGB +' GB.'
+                        'large-size-file.mp4 exceeds maximum size of ' + this.videoUploadMaxFileSizeInGB + ' GB.'
                     );
                 });
                 it('allows file uploads equal in size to the max file size', function() {
                     var fileToUpload = {
                         files: [
-                            {name: 'max-size-file.mp4', size: this.maxFileSizeInBytes},
+                            {name: 'max-size-file.mp4', size: this.maxFileSizeInBytes}
                         ]
                     };
                     this.view.$uploadForm.fileupload('add', fileToUpload);
@@ -119,7 +119,7 @@ define(
                 it('allows file uploads smaller than the max file size', function() {
                     var fileToUpload = {
                         files: [
-                            {name: 'smaller-size-file.mp4', size: this.maxFileSizeInBytes - 1},
+                            {name: 'smaller-size-file.mp4', size: this.maxFileSizeInBytes - 1}
                         ]
                     };
                     this.view.$uploadForm.fileupload('add', fileToUpload);
