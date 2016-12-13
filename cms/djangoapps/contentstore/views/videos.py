@@ -339,6 +339,19 @@ def videos_post(course, request):
                 ("course_key", unicode(course.id)),
         ]:
             key.set_metadata(metadata_name, value)
+
+            # Check if non-ascii characters are present
+            try:
+                metadata_name.encode('ascii')
+                value.encode('ascii')
+            except UnicodeEncodeError as e:
+                error_msg = (
+                     'Non ascii characters found in S3 metadata '
+                     'for key "%s", value: "%s".  \nS3 metadata can only '
+                     'contain ASCII characters. ' % (metadata_name, value)
+                )
+                return JsonResponse({"error": error_msg}, status=400)
+
         upload_url = key.generate_url(
             KEY_EXPIRATION_IN_SECONDS,
             "PUT",
