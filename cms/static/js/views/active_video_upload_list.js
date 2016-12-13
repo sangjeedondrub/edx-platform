@@ -13,7 +13,8 @@ define([
     function($, _, Backbone, ActiveVideoUpload, BaseView, ActiveVideoUploadView, NotificationView, HtmlUtils,
              activeVideoUploadListTemplate) {
         'use strict';
-        var ActiveVideoUploadListView = BaseView.extend({
+        var CONVERSION_FACTOR_GBS_TO_BYTES = 1000 * 1000 * 1000,
+            ActiveVideoUploadListView = BaseView.extend({
             tagName: 'div',
             events: {
                 'click .file-drop-area': 'chooseFile',
@@ -33,6 +34,7 @@ define([
                 if (options.uploadButton) {
                     options.uploadButton.click(this.chooseFile.bind(this));
                 }
+                this.maxFileSizeInBytes = 5 * CONVERSION_FACTOR_GBS_TO_BYTES;
                 // error message modal for file uploads
                 this.fileErrorMsg = null;
             },
@@ -238,6 +240,14 @@ define([
                         )
                         .replace('{filename}', fileName)
                         .replace('{supportedFileFormats}', self.videoSupportedFileFormats.join(' and '));
+                        return false;
+                    }
+                    if (file.size > self.maxFileSizeInBytes) {
+                        error = gettext(
+                            '{filename} exceeds maximum size of {maxFileSizeInGB} GB. '
+                        )
+                        .replace('{filename}', fileName)
+                        .replace('{maxFileSizeInGB}', self.maxFileSizeInBytes / CONVERSION_FACTOR_GBS_TO_BYTES);
                         return false;
                     }
                 });
