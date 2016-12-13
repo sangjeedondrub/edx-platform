@@ -138,7 +138,10 @@
                         $field = $error;
                     }
 
-                    $error.focus();
+                  // Focus on the first error field, if we have one.
+                    if ($error.length) {
+                        $error.focus();
+                    }
                 },
 
                 forgotPassword: function(event) {
@@ -190,19 +193,27 @@
                 },
 
                 setErrors: function() {
-                    var $msg = this.$errors.find('.message-copy'),
+                    var $title = this.$errors.find('.message-title'),
+                        $msg = this.$errors.find('.message-copy'),
                         html = [],
                         errors = this.errors,
                         i,
                         len = errors.length;
 
+                /* Temporarily remove these, then re-add them after the errors
+                 * container has been shown. This seems to make them more visible
+                 * to screen readers in certain browsers (like IE 11).
+                 */
+                    $title.remove();
+                    $msg.remove();
+                    this.element.show(this.$errors);
+                    this.$errors.append($title);
+                    this.$errors.append($msg);
+
                     for (i = 0; i < len; i++) {
                         html.push(errors[i]);
                     }
-
                     $msg.html(html.join(''));
-
-                    this.element.show(this.$errors);
 
                 // Scroll to error messages
                     $('html,body').animate({

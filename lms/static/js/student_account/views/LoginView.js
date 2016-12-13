@@ -87,9 +87,10 @@
 
                 resetEmail: function() {
                     var email = $('#password-reset-email').val(),
-                        successMessage;
+                        successMessage,
+                        $title = this.$resetSuccess.find('.message-title'),
+                        $msg = this.$resetSuccess.find('.message-copy');
                     this.element.hide(this.$errors);
-                    this.resetMessage = this.$resetSuccess.find('.message-copy');
 
                     successMessage = HtmlUtils.interpolateHtml(
                         gettext('{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password reset instructions to this email address.{paragraphEnd}' + // eslint-disable-line max-len
@@ -105,10 +106,19 @@
                             anchorEnd: HtmlUtils.HTML('</a>')
                         });
 
-                    if (this.resetMessage.find('p').length === 0) {
-                        this.resetMessage.append(HtmlUtils.joinHtml(successMessage).toString());
-                    }
+                /* Temporarily remove these, then re-add them after the message
+                 * container has been shown. This seems to make them more visible
+                 * to screen readers in certain browsers (like IE 11).
+                 */
+                    $title.remove();
+                    $msg.remove();
                     this.element.show(this.$resetSuccess);
+                    this.$resetSuccess.append($title);
+                    this.$resetSuccess.append($msg);
+
+                    if ($msg.find('p').length === 0) {
+                        $msg.append(HtmlUtils.joinHtml(successMessage).toString());
+                    }
                 },
 
                 thirdPartyAuth: function(event) {
