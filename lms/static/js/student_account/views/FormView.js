@@ -126,24 +126,6 @@
                     return obj;
                 },
 
-                focusFirstError: function() {
-                    var $error = this.$form.find('.error').first(),
-                        $field = {},
-                        $parent = {};
-
-                    if ($error.is('label')) {
-                        $parent = $error.parent('.form-field');
-                        $error = $parent.find('input') || $parent.find('select');
-                    } else {
-                        $field = $error;
-                    }
-
-                  // Focus on the first error field, if we have one.
-                    if ($error.length) {
-                        $error.focus();
-                    }
-                },
-
                 forgotPassword: function(event) {
                     event.preventDefault();
 
@@ -220,8 +202,8 @@
                         scrollTop: this.$errors.offset().top
                     }, 'slow');
 
-                // Focus on first error field
-                    this.focusFirstError();
+                // Focus on the errors container to ensure screen readers see them.
+                    this.$errors.focus();
                 },
 
             /* Allows extended views to add non-form attributes
