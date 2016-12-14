@@ -1,6 +1,7 @@
 define([
     'jquery',
     'underscore',
+    'underscore.string',
     'backbone',
     'js/models/active_video_upload',
     'js/views/baseview',
@@ -10,7 +11,7 @@ define([
     'text!templates/active-video-upload-list.underscore',
     'jquery.fileupload'
 ],
-    function($, _, Backbone, ActiveVideoUpload, BaseView, ActiveVideoUploadView, NotificationView, HtmlUtils,
+    function($, _, str, Backbone, ActiveVideoUpload, BaseView, ActiveVideoUploadView, NotificationView, HtmlUtils,
              activeVideoUploadListTemplate) {
         'use strict';
         var ActiveVideoUploadListView,
@@ -152,7 +153,8 @@ define([
                                 )
                             }),
                             dataType: 'json',
-                            type: 'POST'
+                            type: 'POST',
+                            global: false
                         }).done(function(responseData) {
                             _.each(
                                 responseData.files,
@@ -167,6 +169,18 @@ define([
                                     });
                                 }
                             );
+                        }).fail(function(response) {
+                            var errorMsg;
+                            if (response.responseText) {
+                                try {
+                                    errorMsg = JSON.parse(response.responseText).error;
+                                } catch (error) {
+                                    errorMsg = str.truncate(response.responseText, 300);
+                                }
+                            } else {
+                                errorMsg = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.');  // eslint-disable-line max-len
+                            }
+                            view.showErrorMessage(errorMsg);
                         });
                     }
                 }
