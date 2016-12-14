@@ -61,7 +61,6 @@
                     this.$form = this.$container.find('form');
                     this.$errors = this.$container.find('.submission-error');
                     this.$formFeedback = this.$container.find('.js-form-feedback');
-                    this.$resetSuccess = this.$container.find('.js-reset-success');
                     this.$authError = this.$container.find('.already-authenticated-msg');
                     this.$submitButton = this.$container.find(this.submitButton);
 
@@ -78,47 +77,38 @@
                     event.preventDefault();
 
                     this.trigger('password-help');
-                    this.element.hide(this.$resetSuccess);
+                    this.$formFeedback.find('.submission-success').remove();
                 },
 
                 postFormSubmission: function() {
-                    this.element.hide(this.$resetSuccess);
+                    this.$formFeedback.find('.submission-success').remove();
                 },
 
                 resetEmail: function() {
                     var email = $('#password-reset-email').val(),
-                        successMessage,
-                        $title = this.$resetSuccess.find('.message-title'),
-                        $msg = this.$resetSuccess.find('.message-copy');
+                        successTitle = gettext("Check Your Email"),
+                        successMessageHtml = HtmlUtils.interpolateHtml(
+                            gettext('{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password reset instructions to this email address.{paragraphEnd}' + // eslint-disable-line max-len
+                            '{paragraphStart}If you do not receive a password reset message, verify that you entered the correct email address, or check your spam folder.{paragraphEnd}' + // eslint-disable-line max-len
+                            '{paragraphStart}If you need further assistance, {anchorStart}contact technical support{anchorEnd}.{paragraphEnd}'), { // eslint-disable-line max-len
+                                boldStart: HtmlUtils.HTML('<b>'),
+                                boldEnd: HtmlUtils.HTML('</b>'),
+                                paragraphStart: HtmlUtils.HTML('<p>'),
+                                paragraphEnd: HtmlUtils.HTML('</p>'),
+                                email: email,
+                                platform_name: this.platformName,
+                                anchorStart: HtmlUtils.HTML('<a href="' + this.supportURL + '">'),
+                                anchorEnd: HtmlUtils.HTML('</a>')
+                            }
+                        );
+
                     this.element.hide(this.$errors);
-
-                    successMessage = HtmlUtils.interpolateHtml(
-                        gettext('{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password reset instructions to this email address.{paragraphEnd}' + // eslint-disable-line max-len
-                        '{paragraphStart}If you do not receive a password reset message, verify that you entered the correct email address, or check your spam folder.{paragraphEnd}' + // eslint-disable-line max-len
-                        '{paragraphStart}If you need further assistance, {anchorStart}contact technical support{anchorEnd}.{paragraphEnd}'), { // eslint-disable-line max-len
-                            boldStart: HtmlUtils.HTML('<b>'),
-                            boldEnd: HtmlUtils.HTML('</b>'),
-                            paragraphStart: HtmlUtils.HTML('<p>'),
-                            paragraphEnd: HtmlUtils.HTML('</p>'),
-                            email: email,
-                            platform_name: this.platformName,
-                            anchorStart: HtmlUtils.HTML('<a href="' + this.supportURL + '">'),
-                            anchorEnd: HtmlUtils.HTML('</a>')
-                        });
-
-                /* Temporarily remove these, then re-add them after the message
-                 * container has been shown. This seems to make them more visible
-                 * to screen readers in certain browsers (like IE 11).
-                 */
-                    $title.remove();
-                    $msg.remove();
-                    this.element.show(this.$resetSuccess);
-                    this.$resetSuccess.append($title);
-                    this.$resetSuccess.append($msg);
-
-                    if ($msg.find('p').length === 0) {
-                        $msg.append(HtmlUtils.joinHtml(successMessage).toString());
-                    }
+                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.successTpl)({
+                        context: {
+                            title: successTitle,
+                            messageHtml: successMessageHtml
+                        }
+                    }));
                 },
 
                 thirdPartyAuth: function(event) {
@@ -131,7 +121,7 @@
 
                 saveSuccess: function() {
                     this.trigger('auth-complete');
-                    this.element.hide(this.$resetSuccess);
+                    this.$formFeedback.find('.submission-success').remove();
                 },
 
                 saveError: function(error) {
@@ -143,7 +133,7 @@
                     }
                     this.errors = ['<li>' + msg + '</li>'];
                     this.setErrors();
-                    this.element.hide(this.$resetSuccess);
+                    this.$formFeedback.find('.submission-success').remove();
 
                 /* If we've gotten a 403 error, it means that we've successfully
                  * authenticated with a third-party provider, but we haven't
