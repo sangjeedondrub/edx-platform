@@ -108,13 +108,12 @@
                             }
                         );
 
-                    this.clearFormFeedback();
-                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.successTpl)({
+                    this.renderFormFeedback(this.successTpl, {
                         context: {
                             title: successTitle,
                             messageHtml: successMessageHtml
                         }
-                    }));
+                    });
                 },
 
                 thirdPartyAuth: function(event) {
