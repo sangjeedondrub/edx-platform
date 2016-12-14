@@ -19,7 +19,7 @@
 
                 formType: 'register',
 
-                errorsTitle: gettext("We couldn't create your account."),
+                defaultErrorsTitle: gettext("We couldn't create your account."),
 
                 submitButton: '.js-register',
 
@@ -90,7 +90,8 @@
                             }
                         )
                     );
-                    this.showErrors();
+                    this.renderErrors(this.defaultErrorsTitle, this.errors);
+                    this.toggleDisableButton(false);
                 },
 
                 postFormSubmission: function() {

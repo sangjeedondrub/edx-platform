@@ -19,7 +19,7 @@
 
                 errorsTpl: '#form_errors-tpl',
 
-                errorsTitle: '',
+                defaultErrorsTitle: gettext("An error occurred."),
 
                 successTpl: '#form_success-tpl',
 
@@ -179,17 +179,18 @@
 
                 saveError: function(error) {
                     this.errors = ['<li>' + error.responseText + '</li>'];
-                    this.showErrors()
+                    this.renderErrors(this.defaultErrorsTitle, this.errors)
+                    this.toggleDisableButton(false);
                 },
 
-                setErrors: function() {
+                renderErrors: function(title, errorMessages) {
                 // Clear out the feedback container.
                     this.clearFormFeedback();
 
                     HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.errorsTpl)({
                         context: {
-                            title: this.errorsTitle,
-                            messagesHtml: HtmlUtils.HTML(this.errors.join(""))
+                            title: title,
+                            messagesHtml: HtmlUtils.HTML(errorMessages.join(""))
                         }
                     }));
 
@@ -224,7 +225,8 @@
                         this.model.set(data);
                         this.model.save();
                     } else {
-                        this.showErrors();
+                        this.renderErrors(this.defaultErrorsTitle, this.errors);
+                        this.toggleDisableButton(false);
                     }
 
                     this.postFormSubmission();
@@ -235,11 +237,6 @@
              */
                 postFormSubmission: function() {
                     return true;
-                },
-
-                showErrors: function() {
-                    this.setErrors();
-                    this.toggleDisableButton(false);
                 },
 
                 clearFormFeedback: function() {

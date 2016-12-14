@@ -19,7 +19,7 @@
                 formType: 'login',
                 requiredStr: '',
                 submitButton: '.js-login',
-                errorsTitle: gettext("We couldn't sign you in."),
+                defaultErrorsTitle: gettext("We couldn't sign you in."),
 
                 preRender: function(data) {
                     this.providers = data.thirdPartyAuth.providers || [];
@@ -45,12 +45,16 @@
                         context: {
                             fields: fields,
                             currentProvider: this.currentProvider,
-                            errorMessage: this.errorMessage,
                             providers: this.providers,
                             hasSecondaryProviders: this.hasSecondaryProviders,
                             platformName: this.platformName
                         }
                     }));
+
+                    if (this.errorMessage) {
+                        var title = _.sprintf(gettext("An error occurred when signing you in to %s."), this.platformName);
+                        this.renderErrors(title, [this.errorMessage])
+                    }
 
                     this.postRender();
 
@@ -78,6 +82,12 @@
 
                     this.trigger('password-help');
                     this.clearFormFeedback();
+                },
+
+                postFormSubmission: function() {
+                    if (!this.errors.length) {
+                        this.clearFormFeedback();
+                    }
                 },
 
                 resetEmail: function() {
@@ -141,7 +151,7 @@
                         this.element.show(this.$authError);
                     } else {
                         this.element.hide(this.$authError);
-                        this.setErrors();
+                        this.renderErrors(this.defaultErrorsTitle, this.errors);
                     }
                     this.toggleDisableButton(false);
                 }

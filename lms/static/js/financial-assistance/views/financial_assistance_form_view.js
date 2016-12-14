@@ -35,7 +35,7 @@
                  formType: 'financial-assistance',
                  errorsTpl:  errorsTpl,
                  successTpl: successTpl,
-                 errorsTitle: gettext('Unable to submit application'),
+                 defaultErrorsTitle: gettext('Unable to submit application'),
                  requiredStr: '',
                  submitButton: '.js-submit-form',
 
@@ -107,7 +107,7 @@
                      }
 
                      this.errors = ['<li>' + msg + '</li>'];
-                     this.showErrors();
+                     this.showErrors(this.defaultErrorsTitle, this.errors);
                  },
 
                  setExtraData: function(data) {

@@ -2,10 +2,9 @@
     'use strict';
     define([
         'jquery',
-        'gettext',
         'js/student_account/views/FormView'
     ],
-        function($, gettext, FormView) {
+        function($, FormView) {
             return FormView.extend({
                 el: '#password-reset-form',
 
@@ -16,8 +15,6 @@
                 },
 
                 formType: 'password-reset',
-
-                errorsTitle: gettext("An error occurred."),
 
                 requiredStr: '',
 
