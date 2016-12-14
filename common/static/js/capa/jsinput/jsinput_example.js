@@ -37,9 +37,8 @@
 
     function getGrade() {
         // The following return value may or may not be used to grade server-side.
-        // If getState and setState are used, then the Python grader also gets
-        // access to the return value of getState and can choose it instead to
-        // grade.
+        // If getState and setState are used, then the Python grader also gets access
+        // to the return value of getState and can choose it instead to grade.
         return JSON.stringify(state.selectedChoice);
     }
 
@@ -76,7 +75,7 @@
     select.addEventListener('change', function() {
         state.selectedChoice = select.options[select.selectedIndex].text;
         feedback.innerText = "You have selected '" + state.selectedChoice +
-            "'. Press the Submit button to grade your answer.";
+            "'. Click Submit to grade your answer.";
     });
 
     return {

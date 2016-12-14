@@ -8,8 +8,8 @@ data: |
           <p>
               In these problems (also called custom JavaScript problems or JS Input
               problems), you add a problem or tool that uses JavaScript in Studio.
-              Studio embeds the problem in an IFrame so that your students can
-              interact with it in the LMS. You can grade your students' work using
+              Studio embeds the problem in an IFrame so that your learners can
+              interact with it in the LMS. You can grade your learners' work using
               JavaScript and some basic Python, and the grading is integrated into the
               edX grading system.
           </p>
@@ -31,8 +31,8 @@ data: |
           <p>
               When you add the problem, be sure to select <strong>Settings</strong>
               to specify a <strong>Display Name</strong> and other values that apply.
-              Also be sure to specify a <strong>title</strong> attribute on the <strong>jsinput</strong> tag;
-              this will be used for the title attribute on the generated IFrame. Generally,
+              Also, be sure to specify a <strong>title</strong> attribute on the <strong>jsinput</strong> tag;
+              this title is used for the title attribute on the generated IFrame. Generally,
               the title attribute on the IFrame should match the title tag of the HTML hosted
               within the IFrame, which is specified by the <strong>html_file</strong> attribute.
           </p>
@@ -62,7 +62,7 @@ data: |
         """
       ]]>
       </script>
-            <p>This is paragraph text displayed before the IFrame</p>
+            <p>This is paragraph text displayed before the IFrame.</p>
             <jsinput
               gradefn="JSInputDemo.getGrade"
               get_statefn="JSInputDemo.getState"
