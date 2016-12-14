@@ -45,7 +45,7 @@ from contentstore.utils import reverse_course_url, reverse_usage_url, reverse_li
 
 __all__ = [
     'import_handler', 'import_status_handler',
-    'export_handler', 'prepare_upload_url',
+    'export_handler',
 ]
 
 
