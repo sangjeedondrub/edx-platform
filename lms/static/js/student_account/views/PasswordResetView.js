@@ -35,7 +35,6 @@
                         this.toggleDisableButton(false);
                     } else {
                         this.$formFeedback.find(".submission-error").remove();
-                        this.element.hide(this.$errors);
                     }
                 },
 
