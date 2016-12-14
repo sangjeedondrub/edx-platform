@@ -65,7 +65,6 @@
                     this.$container = $(this.el);
                     this.$form = this.$container.find('form');
                     this.$formFeedback = this.$container.find('.js-form-feedback');
-                    this.$authError = this.$container.find('.already-authenticated-msg');
                     this.$submitButton = this.$container.find(this.submitButton);
 
                 /* If we're already authenticated with a third-party
@@ -149,7 +148,6 @@
                      this.currentProvider) {
                         this.renderAuthWarning();
                     } else {
-                        this.element.hide(this.$authError);
                         this.renderErrors(this.defaultErrorsTitle, this.errors);
                     }
                     this.toggleDisableButton(false);
