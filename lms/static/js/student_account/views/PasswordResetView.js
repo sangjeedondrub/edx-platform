@@ -2,9 +2,10 @@
     'use strict';
     define([
         'jquery',
+        'gettext',
         'js/student_account/views/FormView'
     ],
-        function($, FormView) {
+        function($, gettext, FormView) {
             return FormView.extend({
                 el: '#password-reset-form',
 
@@ -15,6 +16,8 @@
                 },
 
                 formType: 'password-reset',
+
+                errorsTitle: gettext("An error occurred."),
 
                 requiredStr: '',
 
@@ -31,6 +34,7 @@
                         this.setErrors();
                         this.toggleDisableButton(false);
                     } else {
+                        this.$formFeedback.find(".submission-error").remove();
                         this.element.hide(this.$errors);
                     }
                 },

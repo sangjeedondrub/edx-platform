@@ -3,9 +3,10 @@
     define([
         'jquery',
         'underscore',
+        'gettext',
         'js/student_account/views/FormView'
     ],
-        function($, _, FormView) {
+        function($, _, gettext, FormView) {
             return FormView.extend({
                 el: '#register-form',
 
@@ -17,6 +18,8 @@
                 },
 
                 formType: 'register',
+
+                errorsTitle: gettext("We couldn't create your account."),
 
                 submitButton: '.js-register',
 

@@ -1,8 +1,4 @@
 <div class="js-form-feedback" aria-live="assertive">
-    <div class="status submission-error hidden" tabindex="-1">
-        <h4 class="message-title"><%- gettext("We couldn't create your account.") %></h4>
-        <ul class="message-copy"></ul>
-    </div>
 </div>
 
 <form id="register" class="register-form" autocomplete="off" tabindex="-1" method="POST">

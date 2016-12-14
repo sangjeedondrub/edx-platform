@@ -19,6 +19,7 @@
                 formType: 'login',
                 requiredStr: '',
                 submitButton: '.js-login',
+                errorsTitle: gettext("We couldn't sign you in."),
 
                 preRender: function(data) {
                     this.providers = data.thirdPartyAuth.providers || [];
@@ -59,7 +60,6 @@
                 postRender: function() {
                     this.$container = $(this.el);
                     this.$form = this.$container.find('form');
-                    this.$errors = this.$container.find('.submission-error');
                     this.$formFeedback = this.$container.find('.js-form-feedback');
                     this.$authError = this.$container.find('.already-authenticated-msg');
                     this.$submitButton = this.$container.find(this.submitButton);
@@ -102,7 +102,7 @@
                             }
                         );
 
-                    this.element.hide(this.$errors);
+                    this.$formFeedback.find('.submission-error').remove();
                     HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.successTpl)({
                         context: {
                             title: successTitle,
@@ -132,7 +132,6 @@
                         msg = gettext('An error has occurred. Try refreshing the page, or check your Internet connection.');
                     }
                     this.errors = ['<li>' + msg + '</li>'];
-                    this.setErrors();
                     this.$formFeedback.find('.submission-success').remove();
 
                 /* If we've gotten a 403 error, it means that we've successfully
@@ -145,10 +144,9 @@
                      error.responseText === 'third-party-auth' &&
                      this.currentProvider) {
                         this.element.show(this.$authError);
-                        this.element.hide(this.$errors);
                     } else {
                         this.element.hide(this.$authError);
-                        this.element.show(this.$errors);
+                        this.setErrors();
                     }
                     this.toggleDisableButton(false);
                 }

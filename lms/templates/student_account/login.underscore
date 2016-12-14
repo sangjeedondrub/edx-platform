@@ -7,10 +7,6 @@
 </div>
 
 <div class="js-form-feedback" aria-live="assertive">
-    <div class="status submission-error hidden" tabindex="-1">
-        <h4 class="message-title"><%- gettext("We couldn't sign you in.") %></h4>
-        <ul class="message-copy"></ul>
-    </div>
 </div>
 
 <% if (context.errorMessage) { %>

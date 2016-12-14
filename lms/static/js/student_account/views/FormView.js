@@ -4,9 +4,10 @@
         'jquery',
         'underscore',
         'backbone',
-        'common/js/utils/edx.utils.validate'
+        'common/js/utils/edx.utils.validate',
+        'edx-ui-toolkit/js/utils/html-utils'
     ],
-        function($, _, Backbone, EdxUtilsValidate) {
+        function($, _, Backbone, EdxUtilsValidate, HtmlUtils) {
             return Backbone.View.extend({
                 tagName: 'form',
 
@@ -17,6 +18,8 @@
                 fieldTpl: '#form_field-tpl',
 
                 errorsTpl: '#form_errors-tpl',
+
+                errorsTitle: '',
 
                 successTpl: '#form_success-tpl',
 
@@ -72,7 +75,6 @@
                 postRender: function() {
                     var $container = $(this.el);
                     this.$form = $container.find('form');
-                    this.$errors = $container.find('.submission-error');
                     this.$formFeedback = $container.find('.js-form-feedback');
                     this.$submitButton = $container.find(this.submitButton);
                 },
@@ -182,35 +184,34 @@
                 },
 
                 setErrors: function() {
-                    var $title = this.$errors.find('.message-title'),
-                        $msg = this.$errors.find('.message-copy'),
-                        html = [],
+                    var html = [],
                         errors = this.errors,
                         i,
-                        len = errors.length;
+                        len = errors.length,
+                        $errorsContainer;
 
-                /* Temporarily remove these, then re-add them after the errors
-                 * container has been shown. This seems to make them more visible
-                 * to screen readers in certain browsers (like IE 11).
-                 */
-                    $title.remove();
-                    $msg.remove();
-                    this.element.show(this.$errors);
-                    this.$errors.append($title);
-                    this.$errors.append($msg);
+                // Clear out the old errors if present
+                    this.$formFeedback.find('.submission-error').remove();
 
                     for (i = 0; i < len; i++) {
                         html.push(errors[i]);
                     }
-                    $msg.html(html.join(''));
+                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.errorsTpl)({
+                        context: {
+                            title: this.errorsTitle,
+                            messagesHtml: HtmlUtils.HTML(html.join(""))
+                        }
+                    }));
+
+                    $errorsContainer = this.$formFeedback.find('.submission-error');
 
                 // Scroll to error messages
                     $('html,body').animate({
-                        scrollTop: this.$errors.offset().top
+                        scrollTop: $errorsContainer.offset().top
                     }, 'slow');
 
                 // Focus on the errors container to ensure screen readers see them.
-                    this.$errors.focus();
+                    $errorsContainer.focus();
                 },
 
             /* Allows extended views to add non-form attributes
@@ -253,7 +254,7 @@
                         this.setErrors();
                         this.toggleDisableButton(false);
                     } else {
-                        this.element.hide(this.$errors);
+                        this.$formFeedback.find('.submission-error').remove()
                     }
                 },
 
