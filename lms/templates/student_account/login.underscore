@@ -1,11 +1,3 @@
-<div class="status already-authenticated-msg hidden">
-    <% if (context.currentProvider) { %>
-        <p class="message-copy">
-            <%- _.sprintf( gettext("You have successfully signed into %(currentProvider)s, but your %(currentProvider)s account does not have a linked %(platformName)s account. To link your accounts, sign in now using your %(platformName)s password."), context ) %>
-        </p>
-    <% } %>
-</div>
-
 <div class="js-form-feedback" aria-live="assertive" tabindex="-1">
 </div>
 
