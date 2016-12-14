@@ -148,13 +148,28 @@
                     if (error.status === 403 &&
                      error.responseText === 'third-party-auth' &&
                      this.currentProvider) {
-                        this.element.show(this.$authError);
+                        this.renderAuthWarning();
                     } else {
                         this.element.hide(this.$authError);
                         this.renderErrors(this.defaultErrorsTitle, this.errors);
                     }
                     this.toggleDisableButton(false);
-                }
+                },
+
+                renderAuthWarning: function() {
+                    var message = _.sprintf(
+                        gettext("You have successfully signed into %(currentProvider)s, but your %(currentProvider)s" +
+                                " account does not have a linked %(platformName)s account. To link your accounts, sign" +
+                                " in now using your %(platformName)s password."),
+                        { currentProvider: this.currentProvider, platformName: this.platformName }
+                    );
+
+                    this.renderFormFeedback(this.statusTpl, {
+                        context: {
+                          message: message
+                        }
+                    });
+                },
             });
         });
 }).call(this, define || RequireJS.define);

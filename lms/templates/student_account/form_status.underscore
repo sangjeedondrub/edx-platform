@@ -1,0 +1,6 @@
+<div class="status">
+    <p class="message-copy">
+        <%- context.message %>
+    </p>
+</div>
+

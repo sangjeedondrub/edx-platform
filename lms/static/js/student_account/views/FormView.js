@@ -23,6 +23,8 @@
 
                 successTpl: '#form_success-tpl',
 
+                statusTpl: '#form_status-tpl',
+
                 events: {},
 
                 errors: [],
@@ -46,6 +48,7 @@
                     this.fieldTpl = $(this.fieldTpl).html();
                     this.errorsTpl = $(this.errorsTpl).html();
                     this.successTpl = $(this.successTpl).html();
+                    this.statusTpl = $(this.statusTpl).html();
 
                     this.buildForm(data.fields);
                     this.listenTo(this.model, 'error', this.saveError);
@@ -184,15 +187,18 @@
                 },
 
                 renderErrors: function(title, errorMessages) {
-                // Clear out the feedback container.
-                    this.clearFormFeedback();
-
-                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.errorsTpl)({
+                    this.renderFormFeedback(this.errorsTpl, {
                         context: {
                             title: title,
                             messagesHtml: HtmlUtils.HTML(errorMessages.join(""))
                         }
-                    }));
+                    });
+                },
+
+                renderFormFeedback: function(template, context) {
+                    this.clearFormFeedback();
+
+                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(template)(context));
 
                 // Scroll to feedback container
                     $('html,body').animate({
