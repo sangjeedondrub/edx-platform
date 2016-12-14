@@ -77,11 +77,7 @@
                     event.preventDefault();
 
                     this.trigger('password-help');
-                    this.$formFeedback.find('.submission-success').remove();
-                },
-
-                postFormSubmission: function() {
-                    this.$formFeedback.find('.submission-success').remove();
+                    this.clearFormFeedback();
                 },
 
                 resetEmail: function() {
@@ -102,7 +98,7 @@
                             }
                         );
 
-                    this.$formFeedback.find('.submission-error').remove();
+                    this.clearFormFeedback();
                     HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.successTpl)({
                         context: {
                             title: successTitle,
@@ -121,7 +117,7 @@
 
                 saveSuccess: function() {
                     this.trigger('auth-complete');
-                    this.$formFeedback.find('.submission-success').remove();
+                    this.clearFormFeedback();
                 },
 
                 saveError: function(error) {
@@ -132,7 +128,6 @@
                         msg = gettext('An error has occurred. Try refreshing the page, or check your Internet connection.');
                     }
                     this.errors = ['<li>' + msg + '</li>'];
-                    this.$formFeedback.find('.submission-success').remove();
 
                 /* If we've gotten a 403 error, it means that we've successfully
                  * authenticated with a third-party provider, but we haven't

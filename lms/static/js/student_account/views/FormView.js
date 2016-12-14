@@ -179,39 +179,27 @@
 
                 saveError: function(error) {
                     this.errors = ['<li>' + error.responseText + '</li>'];
-                    this.setErrors();
-                    this.toggleDisableButton(false);
+                    this.showErrors()
                 },
 
                 setErrors: function() {
-                    var html = [],
-                        errors = this.errors,
-                        i,
-                        len = errors.length,
-                        $errorsContainer;
+                // Clear out the feedback container.
+                    this.clearFormFeedback();
 
-                // Clear out the old errors if present
-                    this.$formFeedback.find('.submission-error').remove();
-
-                    for (i = 0; i < len; i++) {
-                        html.push(errors[i]);
-                    }
                     HtmlUtils.append(this.$formFeedback, HtmlUtils.template(this.errorsTpl)({
                         context: {
                             title: this.errorsTitle,
-                            messagesHtml: HtmlUtils.HTML(html.join(""))
+                            messagesHtml: HtmlUtils.HTML(this.errors.join(""))
                         }
                     }));
 
-                    $errorsContainer = this.$formFeedback.find('.submission-error');
-
-                // Scroll to error messages
+                // Scroll to feedback container
                     $('html,body').animate({
-                        scrollTop: $errorsContainer.offset().top
+                        scrollTop: this.$formFeedback.offset().top
                     }, 'slow');
 
-                // Focus on the errors container to ensure screen readers see them.
-                    $errorsContainer.focus();
+                // Focus on the feedback container to ensure screen readers see the messages.
+                    this.$formFeedback.focus();
                 },
 
             /* Allows extended views to add non-form attributes
@@ -229,14 +217,14 @@
                     }
 
                     this.toggleDisableButton(true);
+                    this.clearFormFeedback();
 
                     if (!_.compact(this.errors).length) {
                         data = this.setExtraData(data);
                         this.model.set(data);
                         this.model.save();
-                        this.toggleErrorMsg(false);
                     } else {
-                        this.toggleErrorMsg(true);
+                        this.showErrors();
                     }
 
                     this.postFormSubmission();
@@ -249,13 +237,13 @@
                     return true;
                 },
 
-                toggleErrorMsg: function(show) {
-                    if (show) {
-                        this.setErrors();
-                        this.toggleDisableButton(false);
-                    } else {
-                        this.$formFeedback.find('.submission-error').remove()
-                    }
+                showErrors: function() {
+                    this.setErrors();
+                    this.toggleDisableButton(false);
+                },
+
+                clearFormFeedback: function() {
+                    this.$formFeedback.html("");
                 },
 
             /**

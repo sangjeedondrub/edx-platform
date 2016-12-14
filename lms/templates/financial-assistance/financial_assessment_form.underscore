@@ -7,7 +7,7 @@
 </div>
 
 <form class="financial-assistance-form" method="POST">
-  <div class="js-form-feedback" aria-live="assertive">
+  <div class="js-form-feedback" aria-live="assertive" tabindex="-1">
   </div>
 
 	<div class="user-info">

@@ -1,4 +1,4 @@
-<div class="status submission-error" tabindex="-1">
+<div class="status submission-error">
     <h4 class="message-title"><%- context.title %></h4>
     <ul class="message-copy">
         <%= HtmlUtils.ensureHtml(context.messagesHtml) %>

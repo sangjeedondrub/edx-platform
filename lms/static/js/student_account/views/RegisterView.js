@@ -79,19 +79,18 @@
                 saveError: function(error) {
                     $(this.el).show(); // Show in case the form was hidden for auto-submission
                     this.errors = _.flatten(
-                    _.map(
-                        // Something is passing this 'undefined'. Protect against this.
-                        JSON.parse(error.responseText || '[]'),
-                        function(error_list) {
-                            return _.map(
-                                error_list,
-                                function(error) { return '<li>' + error.user_message + '</li>'; }
-                            );
-                        }
-                    )
-                );
-                    this.setErrors();
-                    this.toggleDisableButton(false);
+                        _.map(
+                            // Something is passing this 'undefined'. Protect against this.
+                            JSON.parse(error.responseText || '[]'),
+                            function(error_list) {
+                                return _.map(
+                                    error_list,
+                                    function(error) { return '<li>' + error.user_message + '</li>'; }
+                                );
+                            }
+                        )
+                    );
+                    this.showErrors();
                 },
 
                 postFormSubmission: function() {

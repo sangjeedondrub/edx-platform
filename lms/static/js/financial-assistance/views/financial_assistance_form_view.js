@@ -107,9 +107,7 @@
                      }
 
                      this.errors = ['<li>' + msg + '</li>'];
-                     this.setErrors();
-                     this.element.hide(this.$resetSuccess);
-                     this.toggleDisableButton(false);
+                     this.showErrors();
                  },
 
                  setExtraData: function(data) {
