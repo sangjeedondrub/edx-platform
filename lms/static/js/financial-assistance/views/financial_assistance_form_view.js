@@ -10,6 +10,7 @@
             'text!../../../templates/financial-assistance/financial_assessment_form.underscore',
             'text!../../../templates/financial-assistance/financial_assessment_submitted.underscore',
             'text!templates/student_account/form_field.underscore',
+            'text!templates/student_account/form_errors.underscore',
             'string_utils'
          ],
          function(
@@ -21,7 +22,8 @@
              FormView,
              formViewTpl,
              successTpl,
-             formFieldTpl
+             formFieldTpl,
+             errorsTpl
          ) {
              return FormView.extend({
                  el: '.financial-assistance-wrapper',
@@ -31,6 +33,9 @@
                  tpl: formViewTpl,
                  fieldTpl: formFieldTpl,
                  formType: 'financial-assistance',
+                 errorsTpl:  errorsTpl,
+                 successTpl: successTpl,
+                 errorsTitle: gettext('Unable to submit application'),
                  requiredStr: '',
                  submitButton: '.js-submit-form',
 
@@ -81,7 +86,7 @@
                  },
 
                  renderSuccess: function() {
-                     this.$el.html(_.template(successTpl)({
+                     this.$el.html(_.template(this.successTpl)({
                          course: this.model.get('course'),
                          dashboard_url: this.context.dashboard_url
                      }));
