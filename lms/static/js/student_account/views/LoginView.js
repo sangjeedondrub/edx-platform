@@ -58,9 +58,9 @@
 
                 postRender: function() {
                     this.$container = $(this.el);
-
                     this.$form = this.$container.find('form');
                     this.$errors = this.$container.find('.submission-error');
+                    this.$formFeedback = this.$container.find('.js-form-feedback');
                     this.$resetSuccess = this.$container.find('.js-reset-success');
                     this.$authError = this.$container.find('.already-authenticated-msg');
                     this.$submitButton = this.$container.find(this.submitButton);

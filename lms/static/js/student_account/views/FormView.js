@@ -16,6 +16,10 @@
 
                 fieldTpl: '#form_field-tpl',
 
+                errorsTpl: '#form_errors-tpl',
+
+                successTpl: '#form_success-tpl',
+
                 events: {},
 
                 errors: [],
@@ -37,8 +41,10 @@
 
                     this.tpl = $(this.tpl).html();
                     this.fieldTpl = $(this.fieldTpl).html();
-                    this.buildForm(data.fields);
+                    this.errorsTpl = $(this.errorsTpl).html();
+                    this.successTpl = $(this.successTpl).html();
 
+                    this.buildForm(data.fields);
                     this.listenTo(this.model, 'error', this.saveError);
                 },
 
@@ -67,6 +73,7 @@
                     var $container = $(this.el);
                     this.$form = $container.find('form');
                     this.$errors = $container.find('.submission-error');
+                    this.$formFeedback = $container.find('.js-form-feedback');
                     this.$submitButton = $container.find(this.submitButton);
                 },
 

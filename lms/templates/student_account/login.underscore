@@ -6,7 +6,7 @@
     <% } %>
 </div>
 
-<div aria-live="assertive">
+<div class="js-form-feedback" aria-live="assertive">
     <div class="js-reset-success status submission-success hidden" tabindex="-1">
         <h4 class="message-title"><%- gettext("Check Your Email") %></h4>
         <div class="message-copy"></div>
