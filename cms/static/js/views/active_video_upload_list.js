@@ -154,7 +154,7 @@ define([
                             }),
                             dataType: 'json',
                             type: 'POST',
-                            global: false
+                            global: false   // Do not trigger global AJAX error handler
                         }).done(function(responseData) {
                             _.each(
                                 responseData.files,
@@ -170,7 +170,6 @@ define([
                                 }
                             );
                         }).fail(function(response) {
-                            var errorMsg;
                             if (response.responseText) {
                                 try {
                                     errorMsg = JSON.parse(response.responseText).error;

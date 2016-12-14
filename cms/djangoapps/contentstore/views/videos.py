@@ -323,13 +323,20 @@ def videos_post(course, request):
     if error:
         return JsonResponse({"error": error}, status=400)
 
-    bucket = storage_service_bucket()
+    bucket = None # storage_service_bucket()
     course_video_upload_token = course.video_upload_pipeline["course_video_upload_token"]
     req_files = request.json["files"]
     resp_files = []
 
     for req_file in req_files:
         file_name = req_file["file_name"]
+
+        # Check if file_name contains non-ascii characters.
+        try:
+            file_name.encode('ascii')
+        except UnicodeEncodeError as e:
+            error_msg = "%s contains non ascii characters in file name." % file_name
+            return JsonResponse({"error": error_msg}, status=400)
 
         edx_video_id = unicode(uuid4())
         key = storage_service_key(bucket, file_name=edx_video_id)
@@ -339,18 +346,6 @@ def videos_post(course, request):
                 ("course_key", unicode(course.id)),
         ]:
             key.set_metadata(metadata_name, value)
-
-            # Check if non-ascii characters are present
-            try:
-                metadata_name.encode('ascii')
-                value.encode('ascii')
-            except UnicodeEncodeError as e:
-                error_msg = (
-                     'Non ascii characters found in S3 metadata '
-                     'for key "%s", value: "%s".  \nS3 metadata can only '
-                     'contain ASCII characters. ' % (metadata_name, value)
-                )
-                return JsonResponse({"error": error_msg}, status=400)
 
         upload_url = key.generate_url(
             KEY_EXPIRATION_IN_SECONDS,

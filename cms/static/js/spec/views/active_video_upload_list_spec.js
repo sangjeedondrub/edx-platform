@@ -30,8 +30,6 @@ define(
                 });
                 this.view.render();
                 jasmine.Ajax.install();
-                this.globalAjaxError = jasmine.createSpy();
-                $(document).ajaxError(this.globalAjaxError);
             });
 
             // Remove window unload handler triggered by the upload requests
@@ -172,9 +170,10 @@ define(
                             });
                         });
 
-                        it('should trigger the global AJAX error handler on server error', function() {
+                        it('should trigger the notification error handler on server error', function() {
                             this.request.respondWith({status: 500});
-                            expect(this.globalAjaxError).toHaveBeenCalled();
+                            expect(this.view.fileErrorMsg).toBeDefined();
+                            expect(this.view.fileErrorMsg.options.title).toEqual('Your file could not be uploaded');
                         });
 
                         describe('and successful server response', function() {
@@ -307,8 +306,8 @@ define(
                                                     }
                                                 });
 
-                                                it('should not trigger the global AJAX error handler', function() {
-                                                    expect(this.globalAjaxError).not.toHaveBeenCalled();
+                                                it('should not trigger the notification error handler', function() {
+                                                    expect(this.view.fileErrorMsg).toBeNull();
                                                 });
 
                                                 if (caseInfo.numFiles > concurrentUploadLimit) {

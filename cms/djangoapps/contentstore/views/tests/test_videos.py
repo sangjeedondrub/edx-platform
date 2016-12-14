@@ -289,6 +289,29 @@ class VideosHandlerTestCase(VideoUploadTestMixin, CourseTestCase):
     @override_settings(AWS_ACCESS_KEY_ID="test_key_id", AWS_SECRET_ACCESS_KEY="test_secret")
     @patch("boto.s3.key.Key")
     @patch("boto.s3.connection.S3Connection")
+    def test_special_character_file(self, mock_conn, mock_key):
+        """
+        Test that video uploads throws error message when file name contains special characters.
+        """
+        file_name = u'test\u2019_file.mp4'
+        files = [{"file_name": file_name, "content_type": "video/mp4"}]
+
+        bucket = Mock()
+        mock_conn.return_value = Mock(get_bucket=Mock(return_value=bucket))
+
+        response = self.client.post(
+            self.url,
+            json.dumps({"files": files}),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        response = json.loads(response.content)
+        self.assertIn('error', response)
+        self.assertEqual(response['error'], "%s contains non ascii characters in file name." % file_name)
+
+    @override_settings(AWS_ACCESS_KEY_ID="test_key_id", AWS_SECRET_ACCESS_KEY="test_secret")
+    @patch("boto.s3.key.Key")
+    @patch("boto.s3.connection.S3Connection")
     def test_post_success(self, mock_conn, mock_key):
         files = [
             {
