@@ -109,7 +109,7 @@
                     expect(view.validate).toHaveBeenCalledWith($('#password-reset-email')[0]);
 
                 // Verify that no submission errors are visible
-                    expect(view.$errors).toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(0);
                 });
 
                 it('displays password reset validation errors', function() {
@@ -119,7 +119,7 @@
                     submitEmail(false);
 
                 // Verify that submission errors are visible
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(1);
                 });
 
                 it('displays an error if the server returns an error while sending a password reset email', function() {
@@ -130,7 +130,7 @@
                     AjaxHelpers.respondWithError(requests);
 
                 // Expect that an error is displayed
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(1);
 
                 // If we try again and succeed, the error should go away
                     submitEmail();
@@ -139,7 +139,7 @@
                     AjaxHelpers.respondWithJson(requests, {});
 
                 // Expect that the error is hidden
-                    expect(view.$errors).toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(0);
                 });
             });
         });

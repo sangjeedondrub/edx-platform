@@ -229,7 +229,7 @@
                     submitForm(false);
 
                 // Verify that submission errors are visible
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(1);
 
                 // Expect auth complete NOT to have been triggered
                     expect(authComplete).toBe(false);
@@ -247,7 +247,8 @@
                     AjaxHelpers.respondWithError(requests);
 
                 // Expect that an error is displayed and that auth complete is not triggered
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(1);
+
                     expect(authComplete).toBe(false);
                 // Form button should be re-enabled on server failure.
                     expect(view.$submitButton).not.toHaveAttr('disabled');
@@ -262,14 +263,15 @@
                     AjaxHelpers.respondWithJson(requests, {});
 
                 // Expect that the error is hidden and auth complete is triggered
-                    expect(view.$errors).toHaveClass('hidden');
+                    expect(view.$formFeedback.find('.submission-error').length).toEqual(0);
                     expect(authComplete).toBe(true);
                 });
 
                 it('displays an error if there is no internet connection', function() {
                     var clock,
                         oldTimeout,
-                        timeout;
+                        timeout,
+                        $error;
 
                 // We're defining "no internet connection" in this case as the
                 // request timing out.  We use a combination of the sinon fake
@@ -288,11 +290,12 @@
                     clock.tick(timeout + 1);
 
                 // Expect that an error is displayed and that auth complete is not triggered
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    $error = view.$formFeedback.find('.submission-error');
+                    expect($error.length).toEqual(1);
                     expect(authComplete).toBe(false);
-                    expect(view.$errors.text()).toContain(
-                    'An error has occurred. Check your Internet connection and try again.'
-                );
+                    expect($error.text()).toContain(
+                        'An error has occurred. Check your Internet connection and try again.'
+                    );
 
                 // Finally, restore the old timeout and turn off the fake timer.
                     $.ajaxSetup({timeout: oldTimeout});
@@ -300,6 +303,7 @@
                 });
 
                 it('displays an error if there is a server error', function() {
+                    var $error;
                     createLoginView(this);
 
                 // Submit the form, with successful validation
@@ -309,11 +313,12 @@
                     AjaxHelpers.respondWithError(requests, 500);
 
                 // Expect that an error is displayed and that auth complete is not triggered
-                    expect(view.$errors).not.toHaveClass('hidden');
+                    $error = view.$formFeedback.find('.submission-error');
+                    expect($error.length).toEqual(1);
                     expect(authComplete).toBe(false);
-                    expect(view.$errors.text()).toContain(
-                    'An error has occurred. Try refreshing the page, or check your Internet connection.'
-                );
+                    expect($error.text()).toContain(
+                        'An error has occurred. Try refreshing the page, or check your Internet connection.'
+                    );
                 });
             });
         });
