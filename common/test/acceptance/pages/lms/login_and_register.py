@@ -356,7 +356,7 @@ class CombinedLoginAndRegisterPage(PageObject):
         """Wait for a status message to be visible following third_party registration, then return it."""
         def _check_func():
             """Return third party auth status notice message."""
-            for selector in ['.already-authenticated-msg p', '.status p']:
+            for selector in ['.status p']:
                 msg_element = self.q(css=selector)
                 if msg_element.visible:
                     return (True, msg_element.text[0])
