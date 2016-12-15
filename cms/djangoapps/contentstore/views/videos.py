@@ -323,7 +323,7 @@ def videos_post(course, request):
     if error:
         return JsonResponse({"error": error}, status=400)
 
-    bucket = None # storage_service_bucket()
+    bucket = storage_service_bucket()
     course_video_upload_token = course.video_upload_pipeline["course_video_upload_token"]
     req_files = request.json["files"]
     resp_files = []
@@ -334,7 +334,7 @@ def videos_post(course, request):
         # Check if file_name contains non-ascii characters.
         try:
             file_name.encode('ascii')
-        except UnicodeEncodeError as e:
+        except UnicodeEncodeError as exception:  # pylint: disable=unused-argument
             error_msg = "%s contains non ascii characters in file name." % file_name
             return JsonResponse({"error": error_msg}, status=400)
 

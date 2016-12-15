@@ -287,9 +287,8 @@ class VideosHandlerTestCase(VideoUploadTestMixin, CourseTestCase):
             self.assertEqual(response['error'], "Request 'files' entry contain unsupported content_type")
 
     @override_settings(AWS_ACCESS_KEY_ID="test_key_id", AWS_SECRET_ACCESS_KEY="test_secret")
-    @patch("boto.s3.key.Key")
     @patch("boto.s3.connection.S3Connection")
-    def test_special_character_file(self, mock_conn, mock_key):
+    def test_special_character_file(self, mock_conn):
         """
         Test that video uploads throws error message when file name contains special characters.
         """
