@@ -80,8 +80,8 @@ class GradesEventIntegrationTest(ProblemSubmissionTestMixin, SharedModuleStoreTe
         self.submit_question_answer('p1', {'2_1': 'choice_choice_2'})
 
         # check logging to make sure id's are tracked correctly across events
-        event_transaction_id = handlers_tracker.method_calls[0][1][1]['event_transaction_id']
-        for call in models_tracker.method_calls:
+        event_transaction_id = handlers_tracker.emit.mock_calls[0][1][1]['event_transaction_id']
+        for call in models_tracker.emit.mock_calls:
             self.assertEqual(event_transaction_id, call[1][1]['event_transaction_id'])
             self.assertEqual(unicode(SUBMITTED_TYPE), call[1][1]['event_transaction_type'])
 
@@ -123,7 +123,7 @@ class GradesEventIntegrationTest(ProblemSubmissionTestMixin, SharedModuleStoreTe
         event_transaction_id = enrollment_tracker.method_calls[0][1][1]['event_transaction_id']
 
         # make sure the id is propagated throughout the event flow
-        for call in models_tracker.method_calls:
+        for call in models_tracker.emit.mock_calls:
             self.assertEqual(event_transaction_id, call[1][1]['event_transaction_id'])
             self.assertEqual(unicode(STATE_DELETED_TYPE), call[1][1]['event_transaction_type'])
 
@@ -188,10 +188,10 @@ class GradesEventIntegrationTest(ProblemSubmissionTestMixin, SharedModuleStoreTe
         )
         # check logging to make sure id's are tracked correctly across
         # events
-        event_transaction_id = instructor_task_tracker.method_calls[0][1][1]['event_transaction_id']
+        event_transaction_id = instructor_task_tracker.emit.mock_calls[0][1][1]['event_transaction_id']
 
         # make sure the id is propagated throughout the event flow
-        for call in models_tracker.method_calls:
+        for call in models_tracker.emit.mock_calls:
             self.assertEqual(event_transaction_id, call[1][1]['event_transaction_id'])
             self.assertEqual(unicode(RESCORE_TYPE), call[1][1]['event_transaction_type'])
 
