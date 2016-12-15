@@ -190,7 +190,10 @@
                 renderFormFeedback: function(template, context) {
                     this.clearFormFeedback();
 
-                    HtmlUtils.append(this.$formFeedback, HtmlUtils.template(template)(context));
+                    HtmlUtils.append(
+                        this.$formFeedback,
+                        HtmlUtils.template(template)(context)
+                    );
 
                 // Scroll to feedback container
                     $('html,body').animate({

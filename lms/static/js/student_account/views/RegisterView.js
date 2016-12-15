@@ -89,7 +89,7 @@
                             function(errorList) {
                                 return _.map(
                                     errorList,
-                                    function(e) { return '<li>' + e.user_message + '</li>'; }
+                                    function(errorItem) { return '<li>' + errorItem.user_message + '</li>'; }
                                 );
                             }
                         )
