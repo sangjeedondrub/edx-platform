@@ -7,7 +7,7 @@
         'edx-ui-toolkit/js/utils/html-utils',
         'js/student_account/views/FormView',
         'text!templates/student_account/form_success.underscore',
-        'text!templates/student_account/form_status.underscore',
+        'text!templates/student_account/form_status.underscore'
     ],
         function($, _, gettext, HtmlUtils, FormView, formSuccessTpl, formStatusTpl) {
             return FormView.extend({
@@ -42,7 +42,10 @@
 
                 render: function(html) {
                     var fields = html || '',
-                        formErrorsTitle = _.sprintf(gettext("An error occurred when signing you in to %s."), this.platformName);
+                        formErrorsTitle = _.sprintf(
+                            gettext('An error occurred when signing you in to %s.'),
+                            this.platformName
+                        );
 
                     $(this.el).html(_.template(this.tpl)({
                     // We pass the context object to the template so that
@@ -95,7 +98,7 @@
 
                 resetEmail: function() {
                     var email = $('#password-reset-email').val(),
-                        successTitle = gettext("Check Your Email"),
+                        successTitle = gettext('Check Your Email'),
                         successMessageHtml = HtmlUtils.interpolateHtml(
                             gettext('{paragraphStart}You entered {boldStart}{email}{boldEnd}. If this email address is associated with your {platform_name} account, we will send a message with password reset instructions to this email address.{paragraphEnd}' + // eslint-disable-line max-len
                             '{paragraphStart}If you do not receive a password reset message, verify that you entered the correct email address, or check your spam folder.{paragraphEnd}' + // eslint-disable-line max-len
@@ -159,18 +162,18 @@
 
                 renderAuthWarning: function() {
                     var message = _.sprintf(
-                        gettext("You have successfully signed into %(currentProvider)s, but your %(currentProvider)s" +
-                                " account does not have a linked %(platformName)s account. To link your accounts, sign" +
-                                " in now using your %(platformName)s password."),
-                        { currentProvider: this.currentProvider, platformName: this.platformName }
+                        gettext('You have successfully signed into %(currentProvider)s, but your %(currentProvider)s' +
+                                ' account does not have a linked %(platformName)s account. To link your accounts,' +
+                                ' sign in now using your %(platformName)s password.'),
+                        {currentProvider: this.currentProvider, platformName: this.platformName}
                     );
 
                     this.renderFormFeedback(this.formStatusTpl, {
                         context: {
-                          message: message
+                            message: message
                         }
                     });
-                },
+                }
             });
         });
 }).call(this, define || RequireJS.define);

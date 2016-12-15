@@ -38,7 +38,7 @@
 
                 render: function(html) {
                     var fields = html || '',
-                        formErrorsTitle = gettext("An error occurred.");
+                        formErrorsTitle = gettext('An error occurred.');
 
                     $(this.el).html(_.template(this.tpl)({
                     /* We pass the context object to the template so that
@@ -86,10 +86,10 @@
                         _.map(
                             // Something is passing this 'undefined'. Protect against this.
                             JSON.parse(error.responseText || '[]'),
-                            function(error_list) {
+                            function(errorList) {
                                 return _.map(
-                                    error_list,
-                                    function(error) { return '<li>' + error.user_message + '</li>'; }
+                                    errorList,
+                                    function(e) { return '<li>' + e.user_message + '</li>'; }
                                 );
                             }
                         )

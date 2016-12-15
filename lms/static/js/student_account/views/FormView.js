@@ -6,7 +6,7 @@
         'backbone',
         'common/js/utils/edx.utils.validate',
         'edx-ui-toolkit/js/utils/html-utils',
-        'text!templates/student_account/form_errors.underscore',
+        'text!templates/student_account/form_errors.underscore'
     ],
         function($, _, Backbone, EdxUtilsValidate, HtmlUtils, formErrorsTpl) {
             return Backbone.View.extend({
@@ -20,7 +20,7 @@
 
                 formErrorsTpl: formErrorsTpl,
 
-                defaultFormErrorsTitle: gettext("An error occurred."),
+                defaultFormErrorsTitle: gettext('An error occurred.'),
 
                 events: {},
 
@@ -176,7 +176,7 @@
 
                 saveError: function(error) {
                     this.errors = ['<li>' + error.responseText + '</li>'];
-                    this.renderErrors(this.defaultFormErrorsTitle, this.errors)
+                    this.renderErrors(this.defaultFormErrorsTitle, this.errors);
                     this.toggleDisableButton(false);
                 },
 
@@ -184,7 +184,7 @@
                     this.renderFormFeedback(this.formErrorsTpl, {
                         context: {
                             title: title,
-                            messagesHtml: HtmlUtils.HTML(errorMessages.join(""))
+                            messagesHtml: HtmlUtils.HTML(errorMessages.join(''))
                         }
                     });
                 },
@@ -240,7 +240,7 @@
                 },
 
                 clearFormFeedback: function() {
-                    this.$formFeedback.html("");
+                    this.$formFeedback.html('');
                 },
 
             /**
