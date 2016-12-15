@@ -20,7 +20,7 @@
 
                 formErrorsTpl: formErrorsTpl,
 
-                defaultformErrorsTitle: gettext("An error occurred."),
+                defaultFormErrorsTitle: gettext("An error occurred."),
 
                 events: {},
 
