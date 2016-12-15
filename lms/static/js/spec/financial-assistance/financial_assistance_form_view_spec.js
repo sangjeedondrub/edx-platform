@@ -142,7 +142,7 @@ define([
 
         invalidCountry = function() {
             expect(view.$('.js-success-message').length).toEqual(0);
-            expect(view.$('.submission-error')).not.toHaveClass('hidden');
+            expect(view.$('.submission-error').length).toEqual(1);
             expect(view.$('#user-country-title')).toHaveClass('error');
             expect(view.$('.js-submit-form').prop('disabled')).toBeTruthy();
         };

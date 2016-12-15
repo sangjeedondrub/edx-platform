@@ -74,26 +74,32 @@
                 });
 
                 it('allows the user to request a new password', function() {
+                    var syncSpy, passwordEmailSentSpy;
+
                     createPasswordResetView(this);
+
+                // We expect these events to be triggered upon a successful password reset
+                    syncSpy  = jasmine.createSpy('syncEvent'),
+                    passwordEmailSentSpy = jasmine.createSpy('passwordEmailSentEvent');
+                    view.listenTo(view.model, 'sync', syncSpy);
+                    view.listenTo(view, 'password-email-sent', passwordEmailSentSpy);
 
                 // Submit the form, with successful validation
                     submitEmail(true);
 
                 // Verify that the client contacts the server with the expected data
                     AjaxHelpers.expectRequest(
-                    requests, 'POST',
-                    FORM_DESCRIPTION.submit_url,
-                    $.param({email: EMAIL})
-                );
+                        requests, 'POST',
+                        FORM_DESCRIPTION.submit_url,
+                        $.param({email: EMAIL})
+                    );
 
                 // Respond with status code 200
                     AjaxHelpers.respondWithJson(requests, {});
 
-                // Verify that the success message is visible
-                    expect($('.js-reset-success')).not.toHaveClass('hidden');
-
-                // Verify that login form has loaded
-                    expect($('#login-form')).not.toHaveClass('hidden');
+                // Verify that the events were triggered
+                    expect(syncSpy).toHaveBeenCalled();
+                    expect(passwordEmailSentSpy).toHaveBeenCalled();
 
                 // Verify that password reset view has been removed
                     expect($(view.el).html().length).toEqual(0);

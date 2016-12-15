@@ -113,9 +113,7 @@
                  },
 
                  validateCountry: function() {
-                     var $submissionContainer = $('.submission-error'),
-                         $errorMessageContainer = $submissionContainer.find('.message-copy'),
-                         $countryLabel = $('#user-country-title'),
+                     var $countryLabel = $('#user-country-title'),
                          txt = [
                              'Please go to your {link_start}profile page{link_end} ',
                              'and provide your country of residence.'
@@ -131,9 +129,8 @@
 
                      if (!this.model.get('country')) {
                          $countryLabel.addClass('error');
-                         $errorMessageContainer.append('<li>' + msg + '</li>');
+                         this.renderErrors(this.defaultFormErrorsTitle, ['<li>' + msg + '</li>']);
                          this.toggleDisableButton(true);
-                         $submissionContainer.removeClass('hidden');
                      }
                  },
 

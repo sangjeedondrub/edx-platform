@@ -243,16 +243,17 @@
 
                 // Verify that the client contacts the server with the expected data
                     AjaxHelpers.expectRequest(
-                    requests, 'POST',
-                    FORM_DESCRIPTION.submit_url,
-                    $.param(USER_DATA)
-                );
+                        requests, 'POST',
+                        FORM_DESCRIPTION.submit_url,
+                        $.param(USER_DATA)
+                    );
 
                 // Respond with status code 200
                     AjaxHelpers.respondWithJson(requests, {});
 
                 // Verify that auth complete is triggered
                     expect(authComplete).toBe(true);
+
                 // Form button should be disabled on success.
                     expect(view.$submitButton).toHaveAttr('disabled');
                 });
@@ -278,10 +279,10 @@
                     $.extend(expectedData, USER_DATA);
 
                     AjaxHelpers.expectRequest(
-                    requests, 'POST',
-                    FORM_DESCRIPTION.submit_url,
-                    $.param(expectedData)
-                );
+                        requests, 'POST',
+                        FORM_DESCRIPTION.submit_url,
+                        $.param(expectedData)
+                    );
                 });
 
                 it('displays third-party auth registration buttons', function() {
@@ -306,6 +307,7 @@
 
                 // Verify that no submission errors are visible
                     expect(view.$formFeedback.find('.submission-error').length).toEqual(0);
+
                 // Form button should be disabled on success.
                     expect(view.$submitButton).toHaveAttr('disabled');
                 });
@@ -321,6 +323,7 @@
 
                 // Expect that auth complete is NOT triggered
                     expect(authComplete).toBe(false);
+
                 // Form button should be re-enabled on error.
                     expect(view.$submitButton).not.toHaveAttr('disabled');
                 });
@@ -347,6 +350,7 @@
                 // Expect that the error is hidden and that auth complete is triggered
                     expect(view.$formFeedback.find('.submission-error').length).toEqual(0);
                     expect(authComplete).toBe(true);
+
                 // Form button should be disabled on success.
                     expect(view.$submitButton).toHaveAttr('disabled');
                 });
