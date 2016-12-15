@@ -41,7 +41,8 @@
                 },
 
                 render: function(html) {
-                    var fields = html || '', errorsTitle;
+                    var fields = html || '',
+                        formErrorsTitle = _.sprintf(gettext("An error occurred when signing you in to %s."), this.platformName);
 
                     $(this.el).html(_.template(this.tpl)({
                     // We pass the context object to the template so that
@@ -56,8 +57,7 @@
                     }));
 
                     if (this.errorMessage) {
-                        errorsTitle = _.sprintf(gettext("An error occurred when signing you in to %s."), this.platformName);
-                        this.renderErrors(errorsTitle, [this.errorMessage]);
+                        this.renderErrors(formErrorsTitle, [this.errorMessage]);
                     }
 
                     this.postRender();

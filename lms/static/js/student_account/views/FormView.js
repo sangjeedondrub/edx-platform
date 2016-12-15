@@ -43,8 +43,8 @@
 
                     this.tpl = $(this.tpl).html();
                     this.fieldTpl = $(this.fieldTpl).html();
-
                     this.buildForm(data.fields);
+
                     this.listenTo(this.model, 'error', this.saveError);
                 },
 

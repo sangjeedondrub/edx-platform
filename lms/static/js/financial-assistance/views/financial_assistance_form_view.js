@@ -104,7 +104,8 @@
                      }
 
                      this.errors = ['<li>' + msg + '</li>'];
-                     this.showErrors(this.defaultFormErrorsTitle, this.errors);
+                     this.renderErrors(this.defaultFormErrorsTitle, this.errors);
+                     this.toggleDisableButton(false);
                  },
 
                  setExtraData: function(data) {

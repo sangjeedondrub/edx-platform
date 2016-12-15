@@ -37,7 +37,8 @@
                 },
 
                 render: function(html) {
-                    var fields = html || '', errorsTitle;
+                    var fields = html || '',
+                        formErrorsTitle = gettext("An error occurred.");
 
                     $(this.el).html(_.template(this.tpl)({
                     /* We pass the context object to the template so that
@@ -53,8 +54,7 @@
                     }));
 
                     if (this.errorMessage) {
-                        errorsTitle = gettext("An error occurred.");
-                        this.renderErrors(errorsTitle, [this.errorMessage]);
+                        this.renderErrors(formErrorsTitle, [this.errorMessage]);
                     }
 
                     this.postRender();
