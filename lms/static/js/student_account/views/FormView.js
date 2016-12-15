@@ -182,10 +182,8 @@
 
                 renderErrors: function(title, errorMessages) {
                     this.renderFormFeedback(this.formErrorsTpl, {
-                        context: {
-                            title: title,
-                            messagesHtml: HtmlUtils.HTML(errorMessages.join(''))
-                        }
+                        title: title,
+                        messagesHtml: HtmlUtils.HTML(errorMessages.join(''))
                     });
                 },
 

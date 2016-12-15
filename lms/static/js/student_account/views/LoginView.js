@@ -115,10 +115,8 @@
                         );
 
                     this.renderFormFeedback(this.formSuccessTpl, {
-                        context: {
-                            title: successTitle,
-                            messageHtml: successMessageHtml
-                        }
+                        title: successTitle,
+                        messageHtml: successMessageHtml
                     });
                 },
 
@@ -169,9 +167,7 @@
                     );
 
                     this.renderFormFeedback(this.formStatusTpl, {
-                        context: {
-                            message: message
-                        }
+                        message: message
                     });
                 }
             });
