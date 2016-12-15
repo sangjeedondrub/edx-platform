@@ -5,9 +5,10 @@
         'underscore',
         'backbone',
         'common/js/utils/edx.utils.validate',
-        'edx-ui-toolkit/js/utils/html-utils'
+        'edx-ui-toolkit/js/utils/html-utils',
+        'text!templates/student_account/form_errors.underscore',
     ],
-        function($, _, Backbone, EdxUtilsValidate, HtmlUtils) {
+        function($, _, Backbone, EdxUtilsValidate, HtmlUtils, formErrorsTpl) {
             return Backbone.View.extend({
                 tagName: 'form',
 
@@ -17,13 +18,9 @@
 
                 fieldTpl: '#form_field-tpl',
 
-                errorsTpl: '#form_errors-tpl',
+                formErrorsTpl: formErrorsTpl,
 
-                defaultErrorsTitle: gettext("An error occurred."),
-
-                successTpl: '#form_success-tpl',
-
-                statusTpl: '#form_status-tpl',
+                defaultformErrorsTitle: gettext("An error occurred."),
 
                 events: {},
 
@@ -46,9 +43,6 @@
 
                     this.tpl = $(this.tpl).html();
                     this.fieldTpl = $(this.fieldTpl).html();
-                    this.errorsTpl = $(this.errorsTpl).html();
-                    this.successTpl = $(this.successTpl).html();
-                    this.statusTpl = $(this.statusTpl).html();
 
                     this.buildForm(data.fields);
                     this.listenTo(this.model, 'error', this.saveError);
@@ -182,12 +176,12 @@
 
                 saveError: function(error) {
                     this.errors = ['<li>' + error.responseText + '</li>'];
-                    this.renderErrors(this.defaultErrorsTitle, this.errors)
+                    this.renderErrors(this.defaultFormErrorsTitle, this.errors)
                     this.toggleDisableButton(false);
                 },
 
                 renderErrors: function(title, errorMessages) {
-                    this.renderFormFeedback(this.errorsTpl, {
+                    this.renderFormFeedback(this.formErrorsTpl, {
                         context: {
                             title: title,
                             messagesHtml: HtmlUtils.HTML(errorMessages.join(""))
@@ -231,7 +225,7 @@
                         this.model.set(data);
                         this.model.save();
                     } else {
-                        this.renderErrors(this.defaultErrorsTitle, this.errors);
+                        this.renderErrors(this.defaultFormErrorsTitle, this.errors);
                         this.toggleDisableButton(false);
                     }
 

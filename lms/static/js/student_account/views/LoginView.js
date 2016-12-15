@@ -5,9 +5,11 @@
         'underscore',
         'gettext',
         'edx-ui-toolkit/js/utils/html-utils',
-        'js/student_account/views/FormView'
+        'js/student_account/views/FormView',
+        'text!templates/student_account/form_success.underscore',
+        'text!templates/student_account/form_status.underscore',
     ],
-        function($, _, gettext, HtmlUtils, FormView) {
+        function($, _, gettext, HtmlUtils, FormView, formSuccessTpl, formStatusTpl) {
             return FormView.extend({
                 el: '#login-form',
                 tpl: '#login-tpl',
@@ -19,7 +21,9 @@
                 formType: 'login',
                 requiredStr: '',
                 submitButton: '.js-login',
-                defaultErrorsTitle: gettext("We couldn't sign you in."),
+                formSuccessTpl: formSuccessTpl,
+                formStatusTpl: formStatusTpl,
+                defaultFormErrorsTitle: gettext("We couldn't sign you in."),
 
                 preRender: function(data) {
                     this.providers = data.thirdPartyAuth.providers || [];
@@ -107,7 +111,7 @@
                             }
                         );
 
-                    this.renderFormFeedback(this.successTpl, {
+                    this.renderFormFeedback(this.formSuccessTpl, {
                         context: {
                             title: successTitle,
                             messageHtml: successMessageHtml
@@ -148,7 +152,7 @@
                      this.currentProvider) {
                         this.renderAuthWarning();
                     } else {
-                        this.renderErrors(this.defaultErrorsTitle, this.errors);
+                        this.renderErrors(this.defaultFormErrorsTitle, this.errors);
                     }
                     this.toggleDisableButton(false);
                 },
@@ -161,7 +165,7 @@
                         { currentProvider: this.currentProvider, platformName: this.platformName }
                     );
 
-                    this.renderFormFeedback(this.statusTpl, {
+                    this.renderFormFeedback(this.formStatusTpl, {
                         context: {
                           message: message
                         }
